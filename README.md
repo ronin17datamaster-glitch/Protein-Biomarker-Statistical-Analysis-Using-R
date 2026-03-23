@@ -1,61 +1,89 @@
-# Protein Biomarker Statistical Analysis Using R
+# Protein Biomarker Statistical Analysis using R
 
-## Overview
+This project provides a rigorous statistical evaluation of biological datasets, focusing on bacterial growth dynamics, enzyme activity, and behavioral patterns. The analysis is implemented in R, utilizing the ANOVA framework to test hypotheses across multiple experimental conditions.
 
-This project focuses on the statistical analysis of protein biomarker data using R to evaluate the impact of different experimental conditions on biological responses. It applies techniques such as one-way ANOVA, two-way ANOVA, assumption testing, and post-hoc analysis to identify significant patterns and relationships in the data. The analysis is structured into three independent experimental studies.
+---
 
-## Objectives
+## Project Overview
 
-The objective of this project is to analyze variations in protein-related biological measurements and determine whether different environmental or experimental factors lead to statistically significant changes. It also aims to demonstrate proper statistical methodology, including model validation and interpretation of results.
+The repository contains a structured analysis divided into three primary experimental modules:
 
-## Project Description
+### 1. Bacterial Doubling Time (One-Way ANOVA)
+* **Objective**: Evaluate the impact of various pollutants (Diesel, Mercury, Pesticide, Cadmium) on the doubling time of bacterial populations relative to a control group.
+* **Statistical Methods**:
+    * **One-Way ANOVA**: Used to determine if significant differences exist between treatment means.
+    * **Bartlett’s Test**: Conducted to confirm the assumption of homogeneity of variance across groups.
+    * **Tukey’s HSD**: Applied as a post-hoc measure to identify specific pairwise differences between pollutants and the control.
 
-### 1. Pollutant Impact on Biological Response
+### 2. Enzyme Activity (Two-Way ANOVA)
+* **Objective**: Analyze the dual effects of temperature (Low, Medium, High, Ultra High) and cell batch (A through E) on enzyme activity levels.
+* **Statistical Methods**:
+    * **Two-Way ANOVA with Interaction**: Evaluates the main effects of temperature and batch, as well as the interaction between the two factors (`temp * cellbatch`).
+    * **Interaction Plots**: Generated to visualize how enzyme response to temperature varies across different biological batches.
 
-This analysis examines how different pollutants influence bacterial doubling time, which serves as a proxy for biological activity related to protein expression. The study includes multiple pollutant types such as Control, Diesel, Mercury, Pesticide, and Cadmium. Exploratory data analysis is performed using boxplots and summary statistics. Bartlett’s test is used to check homogeneity of variances, followed by one-way ANOVA to detect significant differences. Tukey HSD post-hoc analysis identifies specific group-level differences.
+### 3. Mouse Activity Patterns (Model Selection)
+* **Objective**: Investigate the influence of time of day and light intensity on mouse activity, focusing on selecting the most appropriate statistical model.
+* **Statistical Methods**:
+    * **Akaike Information Criterion (AIC)**: Used for model comparison to select between additive and interaction models.
+    * **Shapiro-Wilk Test**: Utilized to verify the normality of residuals, ensuring the validity of the ANOVA results.
+    * **Tukey’s HSD**: Employed to investigate significant differences identified within the time and light factors.
 
-### 2. Enzyme Activity Analysis
+---
 
-This section evaluates enzyme activity under varying temperature conditions and across different cell batches. Temperature levels range from Low to Ultra High, and multiple batches are analyzed to capture variability. An interaction plot is used to visualize relationships, and a two-way ANOVA with interaction is conducted to assess both main and interaction effects. This helps determine how protein-related enzyme activity is influenced by multiple factors simultaneously.
+## Statistical Summary
 
-### 3. Behavioral Response Analysis
+* **Bacterial Analysis**: The study found statistically significant differences in doubling times ($p = 0.00115$), with Cadmium and Diesel treatments showing the most pronounced deviations from the control.
+* **Enzyme Analysis**: Temperature was identified as a highly significant factor ($p < 2e-16$). A marginal interaction was observed between temperature and cell batch ($p = 0.0601$), suggesting batch-specific thermal sensitivity.
+* **Behavioral Analysis**: Based on AIC values, the additive model (`activity ~ time + light`) was identified as the superior fit compared to the interaction model, indicating that time of day and light intensity influence activity independently.
 
-This analysis investigates how environmental conditions such as time of day and light intensity affect activity levels, which can be linked to biological and protein-regulated processes. A two-way ANOVA is applied to evaluate the effects of both factors. Assumptions are tested using Bartlett’s test for equal variances and the Shapiro-Wilk test for normality. Tukey HSD is used for post-hoc comparisons, and AIC is applied for model evaluation.
+---
 
-## Methodology
+## Detailed Results of Tukey HSD Post-hoc Analysis
 
-The project follows a structured workflow including data exploration, visualization, assumption checking, statistical modeling, and interpretation. Visual tools such as boxplots and interaction plots are used to understand data distribution and relationships. Statistical tests are applied systematically to ensure valid and reliable conclusions.
+The following tables provide the specific pairwise comparisons for the significant factors identified in the ANOVA models.
 
-## Technologies Used
+### 1. Bacterial Doubling Time (Pollutant vs. Control)
+The Tukey HSD test identifies which specific pollutants differ significantly from the baseline control group.
 
-The project is implemented in R using libraries such as ggplot2 for visualization and dplyr for data manipulation, along with base R statistical functions. The entire analysis is documented in an R Markdown file to ensure reproducibility.
+| Comparison | Difference | p-adj | Significance |
+| :--- | :--- | :--- | :--- |
+| **Diesel - Control** | -3.00 | 0.0122 | Significant |
+| **Mercury - Control** | -1.80 | 0.2845 | Not Significant |
+| **Pesticide - Control** | -1.53 | 0.4578 | Not Significant |
+| **Cadmium - Control** | -4.03 | 0.0010 | Highly Significant |
 
-## Installation
+### 2. Mouse Activity (Time of Day)
+As the additive model was selected via AIC, the post-hoc analysis focuses on the main effects of the time periods.
 
-Install the required packages in R before running the project:
+| Comparison | Difference | p-adj | Significance |
+| :--- | :--- | :--- | :--- |
+| **midday - morning** | 4.14 | 0.0028 | Significant |
+| **afternoon - morning** | 3.33 | 0.0215 | Significant |
+| **afternoon - midday** | -0.81 | 0.7432 | Not Significant |
 
-```r
-install.packages(c("ggplot2", "dplyr"))
-```
+### 3. Mouse Activity (Light Intensity)
+Pairwise comparisons for the levels of light intensity, independent of the time of day.
+
+| Comparison | Difference | p-adj | Significance |
+| :--- | :--- | :--- | :--- |
+| **medium - low** | 2.53 | 0.0912 | Not Significant |
+| **bright - low** | 3.51 | 0.0125 | Significant |
+| **bright - medium** | 0.98 | 0.7144 | Not Significant |
+
+---
+
+## Requirements
+
+The analysis requires the R programming environment and the following packages:
+* **ggplot2**: For data visualization and interaction plotting.
+* **dplyr**: For data manipulation and group-wise summary statistics.
+* **knitr**: For compiling the R Markdown source into a formatted report.
+
+---
 
 ## Usage
 
-Open the `.Rmd` file in RStudio and execute all code chunks, or use the Knit option to generate the final HTML report. The report contains visualizations, statistical summaries, ANOVA results, and post-hoc analyses.
-
-## Output
-
-The output is an HTML report that includes plots, descriptive statistics, ANOVA tables, assumption test results, and detailed analysis for each experimental study.
-
-## Key Learnings
-
-This project demonstrates the application of statistical techniques to biological data, particularly in the context of protein biomarker analysis. It highlights the importance of validating assumptions, interpreting interaction effects, and presenting results effectively through visualization.
-
-## Conclusion
-
-The analysis shows that experimental conditions have a statistically significant impact on biological responses linked to protein activity. In the pollutant study, certain pollutants clearly slowed bacterial growth compared to the control, indicating that environmental stressors can directly affect biological processes at a measurable level. The post-hoc results highlight that not all pollutants behave equally, with some having a stronger inhibitory effect.
-
-In the enzyme activity analysis, temperature emerged as a critical factor influencing enzyme performance, while variation across cell batches suggests underlying biological or experimental variability. The presence of interaction effects indicates that enzyme response is not uniform across conditions, meaning optimal performance depends on a combination of factors rather than a single variable.
-
-The mouse activity study further reinforces that biological responses are influenced by multiple environmental conditions simultaneously. Both time of day and light intensity significantly affect activity levels, and their interaction suggests that behavioral patterns are context-dependent rather than independent effects.
-
-Overall, the results emphasize that biological systems are highly sensitive to environmental and experimental conditions, with interactions between variables playing a key role. This highlights the importance of using multi-factor statistical models, such as two-way ANOVA, to capture complex relationships and avoid misleading conclusions from single-factor analysis.
+1. Clone the repository to your local environment.
+2. Ensure R and the required libraries (`ggplot2`, `dplyr`) are installed.
+3. Open `finalSolutions.Rmd` in RStudio.
+4. Execute the "Knit" command to generate the full statistical report, including all visualizations and hypothesis test outputs.
