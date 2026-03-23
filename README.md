@@ -1,89 +1,62 @@
 # Protein Biomarker Statistical Analysis using R
 
-This project provides a rigorous statistical evaluation of biological datasets, focusing on bacterial growth dynamics, enzyme activity, and behavioral patterns. The analysis is implemented in R, utilizing the ANOVA framework to test hypotheses across multiple experimental conditions.
+This repository contains a comprehensive statistical analysis of biological datasets, focusing on bacterial growth, enzyme activity, and animal behavior. The analysis is implemented in R and utilizes the Analysis of Variance (ANOVA) framework to derive biological insights.
 
 ---
 
 ## Project Overview
 
-The repository contains a structured analysis divided into three primary experimental modules:
+The project is structured into three experimental modules, each applying specific statistical methodologies to test biological hypotheses.
 
 ### 1. Bacterial Doubling Time (One-Way ANOVA)
-* **Objective**: Evaluate the impact of various pollutants (Diesel, Mercury, Pesticide, Cadmium) on the doubling time of bacterial populations relative to a control group.
-* **Statistical Methods**:
-    * **One-Way ANOVA**: Used to determine if significant differences exist between treatment means.
-    * **Bartlett’s Test**: Conducted to confirm the assumption of homogeneity of variance across groups.
-    * **Tukey’s HSD**: Applied as a post-hoc measure to identify specific pairwise differences between pollutants and the control.
+* [cite_start]**Objective**: To determine if various pollutant treatments (Diesel, Mercury, Pesticide, Cadmium) significantly alter the doubling time of bacteria compared to a control group[cite: 251, 252].
+* **Methodology**:
+    * [cite_start]**One-Way ANOVA**: Used to compare mean doubling times across five groups[cite: 299, 300].
+    * [cite_start]**Bartlett’s Test**: Conducted to verify the assumption of equal variance ($p = 0.5089$)[cite: 292, 298].
+    * [cite_start]**Tukey’s HSD**: Applied for post-hoc pairwise comparisons to identify specific differences between groups[cite: 301, 311].
 
 ### 2. Enzyme Activity (Two-Way ANOVA)
-* **Objective**: Analyze the dual effects of temperature (Low, Medium, High, Ultra High) and cell batch (A through E) on enzyme activity levels.
-* **Statistical Methods**:
-    * **Two-Way ANOVA with Interaction**: Evaluates the main effects of temperature and batch, as well as the interaction between the two factors (`temp * cellbatch`).
-    * **Interaction Plots**: Generated to visualize how enzyme response to temperature varies across different biological batches.
+* [cite_start]**Objective**: To examine the effects of temperature (Low, Medium, High, Ultra High) and different cell batches (A–E) on enzyme activity[cite: 327, 329, 330].
+* **Methodology**:
+    * [cite_start]**Two-Way ANOVA with Interaction**: Evaluated the main effects of temperature and batch, as well as their interaction (`temp * cellbatch`)[cite: 364, 366].
+    * [cite_start]**Interaction Plots**: Utilized to visualize how different cell batches respond to temperature fluctuations[cite: 341, 357].
 
-### 3. Mouse Activity Patterns (Model Selection)
-* **Objective**: Investigate the influence of time of day and light intensity on mouse activity, focusing on selecting the most appropriate statistical model.
-* **Statistical Methods**:
-    * **Akaike Information Criterion (AIC)**: Used for model comparison to select between additive and interaction models.
-    * **Shapiro-Wilk Test**: Utilized to verify the normality of residuals, ensuring the validity of the ANOVA results.
-    * **Tukey’s HSD**: Employed to investigate significant differences identified within the time and light factors.
-
----
-
-## Statistical Summary
-
-* **Bacterial Analysis**: The study found statistically significant differences in doubling times ($p = 0.00115$), with Cadmium and Diesel treatments showing the most pronounced deviations from the control.
-* **Enzyme Analysis**: Temperature was identified as a highly significant factor ($p < 2e-16$). A marginal interaction was observed between temperature and cell batch ($p = 0.0601$), suggesting batch-specific thermal sensitivity.
-* **Behavioral Analysis**: Based on AIC values, the additive model (`activity ~ time + light`) was identified as the superior fit compared to the interaction model, indicating that time of day and light intensity influence activity independently.
+### 3. Mouse Activity (Model Selection)
+* [cite_start]**Objective**: To analyze how time of day (morning, midday, afternoon) and light intensity (low, medium, bright) influence mouse activity levels[cite: 384, 393, 394].
+* **Methodology**:
+    * [cite_start]**AIC (Akaike Information Criterion)**: Used to compare four different models (time only, light only, additive, and interaction) to identify the best fit for the data[cite: 474, 478, 481].
+    * [cite_start]**Assumption Testing**: Included Bartlett’s test for homogeneity of variance and the Shapiro-Wilk test for normality of residuals ($p = 0.5157$)[cite: 450, 452, 456, 460].
 
 ---
 
-## Detailed Results of Tukey HSD Post-hoc Analysis
+## Statistical Results Summary
 
-The following tables provide the specific pairwise comparisons for the significant factors identified in the ANOVA models.
+### 1. Bacterial Growth Results
+[cite_start]The One-Way ANOVA indicated that the pollutant treatments did not have a statistically significant effect on bacterial doubling time at the $\alpha = 0.05$ level ($F(4, 145) = 1.728, p = 0.147$)[cite: 300]. [cite_start]Tukey HSD post-hoc tests confirmed no significant pairwise differences between any pollutant and the control group[cite: 311, 317, 321].
 
-### 1. Bacterial Doubling Time (Pollutant vs. Control)
-The Tukey HSD test identifies which specific pollutants differ significantly from the baseline control group.
 
-| Comparison | Difference | p-adj | Significance |
-| :--- | :--- | :--- | :--- |
-| **Diesel - Control** | -3.00 | 0.0122 | Significant |
-| **Mercury - Control** | -1.80 | 0.2845 | Not Significant |
-| **Pesticide - Control** | -1.53 | 0.4578 | Not Significant |
-| **Cadmium - Control** | -4.03 | 0.0010 | Highly Significant |
+### 2. Enzyme Activity Results
+[cite_start]Temperature was found to be a highly significant factor influencing enzyme activity ($p < 2e-16$)[cite: 371]. [cite_start]However, there was no significant effect from the specific cell batch ($p = 0.790$) or the interaction between temperature and batch ($p = 0.487$)[cite: 375, 378].
 
-### 2. Mouse Activity (Time of Day)
-As the additive model was selected via AIC, the post-hoc analysis focuses on the main effects of the time periods.
 
-| Comparison | Difference | p-adj | Significance |
-| :--- | :--- | :--- | :--- |
-| **midday - morning** | 4.14 | 0.0028 | Significant |
-| **afternoon - morning** | 3.33 | 0.0215 | Significant |
-| **afternoon - midday** | -0.81 | 0.7432 | Not Significant |
-
-### 3. Mouse Activity (Light Intensity)
-Pairwise comparisons for the levels of light intensity, independent of the time of day.
-
-| Comparison | Difference | p-adj | Significance |
-| :--- | :--- | :--- | :--- |
-| **medium - low** | 2.53 | 0.0912 | Not Significant |
-| **bright - low** | 3.51 | 0.0125 | Significant |
-| **bright - medium** | 0.98 | 0.7144 | Not Significant |
+### 3. Mouse Activity Model Selection
+[cite_start]The AIC analysis determined that the **additive model** (`activity ~ time + light`) was the most appropriate fit for the data, as it yielded the lowest AIC value (381.3962)[cite: 484, 485]. [cite_start]Neither the interaction between time and light nor the main effects themselves reached standard statistical significance in the full model ($p > 0.05$)[cite: 437, 441, 447].
 
 ---
 
 ## Requirements
 
-The analysis requires the R programming environment and the following packages:
-* **ggplot2**: For data visualization and interaction plotting.
-* **dplyr**: For data manipulation and group-wise summary statistics.
-* **knitr**: For compiling the R Markdown source into a formatted report.
+To execute the analysis script (`finalSolutions.Rmd`), the following R environment is required:
+* **R** (Version 4.0 or higher recommended)
+* [cite_start]**ggplot2**: For data visualization and interaction plotting [cite: 240]
+* [cite_start]**dplyr**: For data manipulation and summary statistics [cite: 241]
+* [cite_start]**knitr**: For rendering the R Markdown document [cite: 239]
 
 ---
 
 ## Usage
 
-1. Clone the repository to your local environment.
-2. Ensure R and the required libraries (`ggplot2`, `dplyr`) are installed.
-3. Open `finalSolutions.Rmd` in RStudio.
-4. Execute the "Knit" command to generate the full statistical report, including all visualizations and hypothesis test outputs.
+1.  Clone the repository to your local machine.
+2.  Open `finalSolutions.Rmd` in **RStudio**.
+3.  Ensure the required libraries are installed by running `install.packages(c("ggplot2", "dplyr", "knitr"))`.
+4.  Click the **Knit** button to generate a comprehensive HTML report containing all statistical tables and visualizations.
